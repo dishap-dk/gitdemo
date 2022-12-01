@@ -11,8 +11,9 @@ const {
   isValidPincode,
   isValidObjectId,
 }= require ("../utils/validation.js");
-
+console.log("hiii 22")
 const  uploadFile =require ("../utils/aws.js");
+console.log("hiii")
 
 //POST /register
 
@@ -21,6 +22,7 @@ const register = async (req, res) => {
     const data = req.body;
     
     const files = req.files;
+    console.log(files)
     
 
    
@@ -164,8 +166,9 @@ const register = async (req, res) => {
     const hashedPassword = await bcrypt.hash(password, 10);
 
     data.password = hashedPassword;
-
+console.log("disha")
     let profileImg = await uploadFile(files[0]);
+    console.log("disha111")
     data.profileImage = profileImg;
 
     const finaldata = await userModel.create(data);

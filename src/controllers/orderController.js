@@ -11,25 +11,24 @@ const createOrder = async (req,res)=>{
         let userId = req.params.userId
         let data = req.body
     
-     
+    
         const user= await userModel.findById(userId)
-
+    
         const cart = await cartModel.findOne({userId})
-
+    
         if(!isValidObjectId(req.body.cartId))
         return res.status(404).send({status:true,message:`Hey ${user.fname}  cart-id is invalid `})
-
-
-        const findCart = await cartModel.findById(req.body.cartId)
+    
+      const findCart = await cartModel.findById(req.body.cartId)
         if(!findCart)
         return res.status(404).send({status:true,message:`Hey ${user.fname}  cart doesn't exist `})
-
+    
       
         let cartT = await cartModel.findOne({userId:userId})
         if(!cartT) return res.status(404).send({status:false,message:"This cart doesn't belong to u"})
-     
+    
         if(isValid(data))return res.status(404).send({status:true,message:`Hey ${user.fname} Body cant be Empty`})
-
+    
         if(!cart) return res.status(404).send({status:true,message:`Hey ${user.fname} Pls create a cart before Ordering`})
         
         if(cart.items.length == 0)
@@ -42,11 +41,11 @@ const createOrder = async (req,res)=>{
             data.items=cart.items;
             data.totalPrice=cart.totalPrice;
         
-
+        
         const datas = await orderModel.create(data)
-
+    
         let finalData = await orderModel.findById(datas._id).select({__v:0})
-     
+    
         
         //empty the cart
         await cartModel.updateOne({_id:cart._id},{items:[],totalPrice:0,totalItems:0})
@@ -64,7 +63,7 @@ const createOrder = async (req,res)=>{
       let data = req.body
 
       let{orderId,status}= data
-
+    
       if(isValid(data))
       return res.status(400).send({ status: false, message: 'Data is required to cancel the order' });
 
@@ -87,10 +86,10 @@ if(status =='cancelled'){
     
         if(!order.cancellable) return res.status(400).send({ status: false, message: "Sorry Your Order cannnot  be Cancelled" })
        
-        update.status = status
+        update.status = status  // if order is cancellable
 
 }else{
-        update.status = status
+        update.status = status  // otheer than cancel
      }
 
         let result =  await orderModel.findOneAndUpdate({orderId}, update ,{new:true})

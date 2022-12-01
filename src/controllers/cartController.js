@@ -9,7 +9,7 @@ const createCart = async (req, res) => {
   try {
     const userId = req.params.userId;
         const requestBody = req.body;
-
+       
         req.body.quantity = 1
 
         const { productId ,quantity,cartId} = requestBody;
@@ -27,7 +27,7 @@ const createCart = async (req, res) => {
         
 
 
-        let user = await cartModel.findById(userId)
+       // let user = await cartModel.findById(userId)
     
 
         const findProduct = await productModel.findOne({ _id: productId, isDeleted: false });
